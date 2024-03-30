@@ -39,7 +39,7 @@ OPTIONS:
    -h      Show this message
    -n      Host name (required)
    -i      Full path and name of the base .img file to use (required)
-   -k      Full path and name of the ansible user's public key file (required)
+   -k      Full path and name of the cloudgenius user's public key file (required)
    -r      RAM in MB (defaults to ${RAM})
    -c      Number of VCPUs (defaults to ${VCPUS})
    -s      Amount of storage to allocate in GB (defaults to ${STORAGE})
@@ -85,7 +85,7 @@ if [[ -z $IMG_FQN ]]; then
 fi
 
 if [[ -z $AUTH_KEYS_FQN ]]; then
-    echo "ERROR: ansible public key file $AUTH_KEYS_FQN not found"
+    echo "ERROR: cloudgenius public key file $AUTH_KEYS_FQN not found"
     usage
     exit 1
 fi
@@ -117,11 +117,11 @@ cat > "$VM_IMAGE_DIR/init/user-data" << EOF
 #cloud-config
 
 users:
-  - name: ansible
+  - name: cloudgenius
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
     groups: sudo
     shell: /bin/bash
-    homedir: /var/ansible
+    homedir: /home/cloudgenius
     ssh_authorized_keys:
 EOF
 
