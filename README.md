@@ -122,6 +122,8 @@ to install the necessary virtualization packages:
     - python3-libvirt
     - virt-manager
     - virtinst
+    - genisoimage
+    - net-tools
 ```
 
 If you're not using Ansible just `apt-get install` the above packages.
