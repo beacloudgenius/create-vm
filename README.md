@@ -210,7 +210,7 @@ Then create the VM:
 ```
 create-vm -n node1 \
     -i ~/vms/virsh/base/jammy-server-cloudimg-amd64.img \
-    -k ~/.ssh/id_rsa_ansible.pub \
+    -k ~/.ssh/id_rsa.pub \
     -s 40
 ```
 
@@ -278,7 +278,7 @@ This starts the VM creation process and exits. Creation of the VMs continues in 
 
 ```
 for n in `seq 1 8`; do
-    create-vm -n node$n -i ~/vms/virsh/base/jammy-server-cloudimg-amd64.img -k ~/.ssh/id_rsa_ansible.pub
+    create-vm -n node$n -i ~/vms/virsh/base/jammy-server-cloudimg-amd64.img -k ~/.ssh/id_rsa.pub
 done
 ```
 
