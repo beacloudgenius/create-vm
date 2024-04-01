@@ -11,14 +11,14 @@ I was looking for a way to automate the creation of VMs for testing various
 distributed system / cluster software packages. I've used Vagrant in the past
 but I wanted something that would:
 
-* Allow me to use raw image files as the basis for guest VMs.
-* Guest VMs should be set up with bridged IPs that are routable from the host.
-* Guest VMs should be able to reach the Internet.
-* Other hosts on the local network should be able to reach guest VMs. (Setting
+- Allow me to use raw image files as the basis for guest VMs.
+- Guest VMs should be set up with bridged IPs that are routable from the host.
+- Guest VMs should be able to reach the Internet.
+- Other hosts on the local network should be able to reach guest VMs. (Setting
   up additional routes is OK).
-* VM creation should work with any distro that supports Kickstart files.
-* Scripts should be able to create and delete VMs in a scripted, fully-automatic manner.
-* Guest VMs should be set up to allow passwordless ssh access from the "ansible" user, so
+- VM creation should work with any distro that supports Kickstart files.
+- Scripts should be able to create and delete VMs in a scripted, fully-automatic manner.
+- Guest VMs should be set up to allow passwordless ssh access from the "ansible" user, so
   that once a VM is running Ansible can be used for additional configuration and
   customization of the VM.
 
@@ -37,7 +37,7 @@ its own file system, memory, virtualized CPUs, IP address, etc.
 
 The original version of these tools used ISO images and Kickstart files to create
 new VMs from the command line. If you're looking for an example of how to use Kickstart
-files grab [create-vm version 1.0](https://github.com/earlruby/create-vm/tree/1.0).
+files grab [create-vm version 1.0](https://github.com/cloudgeniusruby/create-vm/tree/1.0).
 
 ## Cloud Images
 
@@ -51,13 +51,13 @@ Cloud images have the extension `.img` or `.qcow` and are compiled for different
 
 Cloud images are available for the following distros:
 
-* [Ubuntu](http://cloud-images.ubuntu.com/)
-* [Centos](https://cloud.centos.org/centos/7/images/)
-* [openSUSE](https://download.opensuse.org/repositories/Cloud:/Images:/)
-* [Rocky](https://rockylinux.org/cloud-images/)
-* [Arch](https://geo.mirror.pkgbuild.com/images/latest/)
-* [Gentoo](https://mirror.init7.net/gentoo//experimental/amd64/openstack/)
-* [AlmaLinux](https://github.com/AlmaLinux/cloud-images)
+- [Ubuntu](http://cloud-images.ubuntu.com/)
+- [Centos](https://cloud.centos.org/centos/7/images/)
+- [openSUSE](https://download.opensuse.org/repositories/Cloud:/Images:/)
+- [Rocky](https://rockylinux.org/cloud-images/)
+- [Arch](https://geo.mirror.pkgbuild.com/images/latest/)
+- [Gentoo](https://mirror.init7.net/gentoo//experimental/amd64/openstack/)
+- [AlmaLinux](https://github.com/AlmaLinux/cloud-images)
 
 Pick the base image for the distro and release that you want to install and download it onto your
 host system. Make sure that the base image uses the same hardware architecture as your host system,
@@ -82,11 +82,11 @@ documentation on for cloud-init.
 
 `create-vm` stores files as follows:
 
-* `${VM_IMAGE_DIR}` - Directory used for for VM storage. Defaults to `${HOME}/vms/virsh`.
-* `${VM_IMAGE_DIR}/base/` - Place to store your base Linux cloud images.
-* `${VM_IMAGE_DIR}/images/` - `your-vm-name.img` and `your-vm-name-cidata.img` files.
-* `${VM_IMAGE_DIR}/init/` - `user-data` and `meta-data`.
-* `${VM_IMAGE_DIR}/xml/` - Backup copies of your VMs' XML definition files.
+- `${VM_IMAGE_DIR}` - Directory used for for VM storage. Defaults to `${HOME}/vms/virsh`.
+- `${VM_IMAGE_DIR}/base/` - Place to store your base Linux cloud images.
+- `${VM_IMAGE_DIR}/images/` - `your-vm-name.img` and `your-vm-name-cidata.img` files.
+- `${VM_IMAGE_DIR}/init/` - `user-data` and `meta-data`.
+- `${VM_IMAGE_DIR}/xml/` - Backup copies of your VMs' XML definition files.
 
 QCOW2 filesystems allocate space as needed, so if you create a VM with 100GB of storage, the initial
 size of the `your-vm-name.img` and `your-vm-name-cidata.img` files is only about **700K total**. The
@@ -97,9 +97,9 @@ beyond the disk size that you set when you create the VM.
 
 This repo contains these scripts:
 
-* `create-vm` - Use .img and cloud-init files to auto-generate a VM.
-* `delete-vm` - Delete a virtual machine created with `create-vm`.
-* `get-vm-ip` - Get the IP address of a VM managed by virsh.
+- `create-vm` - Use .img and cloud-init files to auto-generate a VM.
+- `delete-vm` - Delete a virtual machine created with `create-vm`.
+- `get-vm-ip` - Get the IP address of a VM managed by virsh.
 
 ## Host setup
 
@@ -140,33 +140,33 @@ chmod 755 ${HOME}
 
 ... but that allows anyone logged into your Linux host to read everything in your home directory. A
 better approach is just to add `libvirt-qemu` to your home directory's group. For instance, on my host
-my home directory is `/home/earl` owned by user `earl` and group `earl`, permissions `0x750`:
+my home directory is `/home/cloudgenius` owned by user `cloudgenius` and group `cloudgenius`, permissions `0x750`:
 
 ```
-$ chmod 750 /home/earl
+$ chmod 750 /home/cloudgenius
 $ ls -al /home
 total 24
 drwxr-xr-x   6 root      root      4096 Aug 28 21:26 .
 drwxr-xr-x  21 root      root      4096 Aug 28 21:01 ..
-drwxr-x--- 142 earl      earl      4096 Feb 16 09:27 earl
+drwxr-x--- 142 cloudgenius      cloudgenius      4096 Feb 16 09:27 cloudgenius
 ```
 
-To make sure that _only_ the `libvirt-qemu` user can read my files I can add the user to the `earl` group:
+To make sure that _only_ the `libvirt-qemu` user can read my files I can add the user to the `cloudgenius` group:
 
 ```
-$ sudo usermod --append --groups earl libvirt-qemu
+$ sudo usermod --append --groups cloudgenius libvirt-qemu
 $ sudo systemctl restart libvirtd
 $ grep libvirt-qemu /etc/group
-earl:x:1000:libvirt-qemu
+cloudgenius:x:1000:libvirt-qemu
 libvirt-qemu:x:64055:libvirt-qemu
 ```
 
-That shows that the group `earl`, group ID 1000, has a member `libvirt-qemu`. Since the group `earl` has read and execute permissions on my home directory, `libvirt-qemu` has read and execute permissions on my home directory.
+That shows that the group `cloudgenius`, group ID 1000, has a member `libvirt-qemu`. Since the group `cloudgenius` has read and execute permissions on my home directory, `libvirt-qemu` has read and execute permissions on my home directory.
 
 Note: The `libvirtd` daemon will chown some of the files in the directory, including the files in the `~/vms/virsh/images` directory, to be owned by `libvirt-qemu` group `kvm`. In order to delete these files without sudo, add yourself to the `kvm` group, e.g.:
 
 ```
-$ sudo usermod --append --groups kvm earl
+$ sudo usermod --append --groups kvm cloudgenius
 ```
 
 You'll need to log out and log in again before the additional group is active.
@@ -204,6 +204,7 @@ wget http://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.im
 ```
 
 Then create the VM:
+
 ```
 create-vm -n node1 \
     -i ~/vms/virsh/base/jammy-server-cloudimg-amd64.img \
@@ -212,6 +213,7 @@ create-vm -n node1 \
 ```
 
 Once created I can get the IP address and ssh to the VM as the user "ansible":
+
 ```
 $ get-vm-ip node1
 192.168.122.219
