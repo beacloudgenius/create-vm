@@ -34,4 +34,6 @@ if [[ -z $HOSTNAME ]]; then
 fi
 
 MAC=$(virsh -q domiflist $HOSTNAME | awk '{ print $5 }')
-arp -e | grep -i $MAC | awk '{ print $1 }'
+# ping -c 4 -b 192.168.1.255
+# arp -e | grep -i $MAC | awk '{ print $1 }'
+sudo arp-scan --interface=br0 192.168.1.0/24  | grep -i $MAC | awk '{ print $1 }'
